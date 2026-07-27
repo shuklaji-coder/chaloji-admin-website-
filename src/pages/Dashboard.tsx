@@ -270,21 +270,21 @@ export default function Dashboard() {
 
       
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
 
         {cards.map((c) => (
 
-          <div key={c.label} className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-6 flex flex-col justify-between hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 transform hover:-translate-y-1">
+          <div key={c.label} className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-4 sm:p-6 flex flex-col justify-between hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 transform hover:-translate-y-1">
 
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
 
-              <span className="text-sm text-gray-500 font-semibold tracking-wide uppercase">{c.label}</span>
+              <span className="text-xs sm:text-sm text-gray-500 font-semibold tracking-wide uppercase">{c.label}</span>
 
-              <div className={`w-3 h-3 rounded-full bg-gradient-to-br ${c.color} ${c.shadow} shadow-lg`} />
+              <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-gradient-to-br ${c.color} ${c.shadow} shadow-lg`} />
 
             </div>
 
-            <p className={`text-4xl font-black ${c.text}`}>{c.value}</p>
+            <p className={`text-2xl sm:text-3xl lg:text-4xl font-black ${c.text}`}>{c.value}</p>
 
           </div>
 
@@ -292,13 +292,13 @@ export default function Dashboard() {
 
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
 
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-6">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-4 sm:p-6">
 
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Weekly Rides & Revenue</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Weekly Rides & Revenue</h2>
 
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={250}>
 
             <LineChart data={weeklyData}>
 
@@ -324,11 +324,11 @@ export default function Dashboard() {
 
         </div>
 
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-6">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-4 sm:p-6">
 
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Vehicle Distribution</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Vehicle Distribution</h2>
 
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={250}>
 
             <PieChart>
 

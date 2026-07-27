@@ -153,17 +153,17 @@ export default function Rides() {
 
     <div className="animate-in fade-in duration-300">
 
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
 
         <div>
 
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Live Rides & History</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Live Rides & History</h1>
 
           <p className="text-gray-500 mt-1">Track requested, ongoing, and completed trips in real-time.</p>
 
         </div>
 
-        <button onClick={fetchRides} className="px-5 py-2.5 bg-white border border-gray-200 shadow-sm rounded-xl text-sm text-gray-700 hover:text-emerald-700 font-semibold flex items-center gap-2">
+        <button onClick={fetchRides} className="px-4 py-2 sm:px-5 sm:py-2.5 bg-white border border-gray-200 shadow-sm rounded-xl text-xs sm:text-sm text-gray-700 hover:text-emerald-700 font-semibold flex items-center gap-2">
 
            ↻ Refresh
 
@@ -172,10 +172,10 @@ export default function Rides() {
       </div>
 
       {/* Analytics Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Ride Status Distribution</h2>
-          <ResponsiveContainer width="100%" height={250}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4">Ride Status Distribution</h2>
+          <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie
                 data={statusData}
@@ -196,9 +196,9 @@ export default function Rides() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Vehicle Type Distribution</h2>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4">Vehicle Type Distribution</h2>
+          <ResponsiveContainer width="100%" height={200}>
             <BarChart data={vehicleData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
               <XAxis dataKey="name" stroke="#6B7280" />
@@ -210,25 +210,25 @@ export default function Rides() {
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 overflow-x-auto">
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
 
-        <table className="w-full text-sm min-w-[800px]">
+        <table className="w-full text-sm min-w-[600px]">
 
           <thead>
 
             <tr className="bg-gray-50/80 border-b border-gray-100">
 
-              <th className="text-left p-4 pl-6 font-bold text-gray-500 uppercase tracking-wider text-xs">Ride ID</th>
+              <th className="text-left p-3 pl-4 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Ride ID</th>
 
-              <th className="text-left p-4 font-bold text-gray-500 uppercase tracking-wider text-xs">Passenger</th>
+              <th className="text-left p-3 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Passenger</th>
 
-              <th className="text-left p-4 font-bold text-gray-500 uppercase tracking-wider text-xs">Route</th>
+              <th className="text-left p-3 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Route</th>
 
-              <th className="text-left p-4 font-bold text-gray-500 uppercase tracking-wider text-xs">Vehicle</th>
+              <th className="text-left p-3 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Vehicle</th>
 
-              <th className="text-left p-4 font-bold text-gray-500 uppercase tracking-wider text-xs">Fare</th>
+              <th className="text-left p-3 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Fare</th>
 
-              <th className="text-right p-4 pr-6 font-bold text-gray-500 uppercase tracking-wider text-xs">Status</th>
+              <th className="text-right p-3 pr-4 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Status</th>
 
             </tr>
 
@@ -238,7 +238,7 @@ export default function Rides() {
 
             {rides.length === 0 && (
 
-              <tr><td colSpan={6} className="text-center p-12 text-gray-400">No rides scheduled today.</td></tr>
+              <tr><td colSpan={6} className="text-center p-8 sm:p-12 text-gray-400 text-xs sm:text-sm">No rides scheduled today.</td></tr>
 
             )}
 
@@ -246,7 +246,7 @@ export default function Rides() {
 
               <tr key={r.id} className="hover:bg-gray-50 transition-colors">
 
-                <td className="p-4 pl-6 text-gray-500 font-mono text-[11px] whitespace-nowrap">
+                <td className="p-3 pl-4 text-gray-500 font-mono text-[9px] sm:text-[11px] whitespace-nowrap">
 
                   {r.id.substring(0, 8)}<br/>
 
@@ -258,29 +258,29 @@ export default function Rides() {
 
                 </td>
 
-                <td className="p-4">
+                <td className="p-3">
 
-                   <p className="font-bold text-gray-900">{r.passengerName || 'Unknown'}</p>
+                   <p className="font-bold text-gray-900 text-xs sm:text-sm">{r.passengerName || 'Unknown'}</p>
 
-                   {r.driverId && <span className="text-[10px] uppercase tracking-wider font-bold text-emerald-600 block mt-0.5">Driver Assigned</span>}
+                   {r.driverId && <span className="text-[9px] sm:text-[10px] uppercase tracking-wider font-bold text-emerald-600 block mt-0.5">Driver Assigned</span>}
 
                 </td>
 
-                <td className="p-4 max-w-xs">
+                <td className="p-3 max-w-xs">
 
-                  <div className="flex flex-col gap-1.5 text-xs">
+                  <div className="flex flex-col gap-1 sm:gap-1.5 text-[10px] sm:text-xs">
 
-                    <div className="flex items-start gap-2">
+                    <div className="flex items-start gap-1.5 sm:gap-2">
 
-                       <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1 shrink-0"></div>
+                       <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 mt-0.5 sm:mt-1 shrink-0"></div>
 
                        <p className="text-gray-600 truncate">{r.pickup?.address || '—'}</p>
 
                     </div>
 
-                    <div className="flex items-start gap-2">
+                    <div className="flex items-start gap-1.5 sm:gap-2">
 
-                       <div className="w-2 h-2 rounded bg-rose-500 mt-1 shrink-0"></div>
+                       <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded bg-rose-500 mt-0.5 sm:mt-1 shrink-0"></div>
 
                        <p className="text-gray-600 truncate">{r.drop?.address || '—'}</p>
 
@@ -290,13 +290,13 @@ export default function Rides() {
 
                 </td>
 
-                <td className="p-4 text-gray-600 capitalize font-medium">{r.vehicleType || '—'}</td>
+                <td className="p-3 text-gray-600 capitalize font-medium text-xs sm:text-sm">{r.vehicleType || '—'}</td>
 
-                <td className="p-4 font-black tracking-wide text-gray-800">₹{(r.fare || 0).toLocaleString()}</td>
+                <td className="p-3 font-black tracking-wide text-gray-800 text-xs sm:text-sm">₹{(r.fare || 0).toLocaleString()}</td>
 
-                <td className="p-4 pr-6 text-right">
+                <td className="p-3 pr-4 text-right">
 
-                  <span className={`inline-block px-3 py-1 rounded-[6px] text-[10px] font-black uppercase tracking-wider ${getStatusBadge(r.status)}`}>
+                  <span className={`inline-block px-2 sm:px-3 py-0.5 sm:py-1 rounded-[6px] text-[9px] sm:text-[10px] font-black uppercase tracking-wider ${getStatusBadge(r.status)}`}>
 
                     {r.status || 'requested'}
 

@@ -71,21 +71,21 @@ export default function Users() {
 
   return (
     <div className="animate-in fade-in duration-300">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Passenger Management</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Passenger Management</h1>
           <p className="text-gray-500 mt-1">View and manage all registered users.</p>
         </div>
-        <button onClick={fetchUsers} className="px-5 py-2.5 bg-white border border-gray-200 shadow-sm rounded-xl text-sm text-gray-700 hover:text-emerald-700 font-semibold flex items-center gap-2">
+        <button onClick={fetchUsers} className="px-4 py-2 sm:px-5 sm:py-2.5 bg-white border border-gray-200 shadow-sm rounded-xl text-xs sm:text-sm text-gray-700 hover:text-emerald-700 font-semibold flex items-center gap-2">
            ↻ Refresh
         </button>
       </div>
 
       {/* Analytics Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">User Registrations by Month</h2>
-          <ResponsiveContainer width="100%" height={250}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4">User Registrations by Month</h2>
+          <ResponsiveContainer width="100%" height={200}>
             <BarChart data={registrationData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
               <XAxis dataKey="name" stroke="#6B7280" />
@@ -96,9 +96,9 @@ export default function Users() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">User Rides Distribution</h2>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4">User Rides Distribution</h2>
+          <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie
                 data={ridesData}
@@ -120,26 +120,26 @@ export default function Users() {
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 overflow-x-auto">
-        <table className="w-full text-sm min-w-[600px]">
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+        <table className="w-full text-sm min-w-[500px]">
           <thead>
             <tr className="bg-gray-50/80 border-b border-gray-100">
-              <th className="text-left p-4 pl-6 font-bold text-gray-500 uppercase tracking-wider text-xs">User ID</th>
-              <th className="text-left p-4 font-bold text-gray-500 uppercase tracking-wider text-xs">Name</th>
-              <th className="text-left p-4 font-bold text-gray-500 uppercase tracking-wider text-xs">Phone Number</th>
-              <th className="text-left p-4 font-bold text-gray-500 uppercase tracking-wider text-xs">Registered</th>
+              <th className="text-left p-3 pl-4 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">User ID</th>
+              <th className="text-left p-3 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Name</th>
+              <th className="text-left p-3 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Phone Number</th>
+              <th className="text-left p-3 pr-4 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Registered</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
             {users.length === 0 && (
-              <tr><td colSpan={4} className="text-center p-12 text-gray-400">No users found.</td></tr>
+              <tr><td colSpan={4} className="text-center p-8 sm:p-12 text-gray-400 text-xs sm:text-sm">No users found.</td></tr>
             )}
             {users.map(u => (
               <tr key={u.id} className="hover:bg-gray-50 transition-colors">
-                <td className="p-4 pl-6 text-gray-500 font-mono text-xs">{u.id.substring(0, 8)}...</td>
-                <td className="p-4 font-bold text-gray-900">{u.name || 'No Name'}</td>
-                <td className="p-4 text-gray-600 font-medium">{u.phone || '—'}</td>
-                <td className="p-4 text-gray-500">
+                <td className="p-3 pl-4 text-gray-500 font-mono text-[9px] sm:text-xs">{u.id.substring(0, 8)}...</td>
+                <td className="p-3 font-bold text-gray-900 text-xs sm:text-sm">{u.name || 'No Name'}</td>
+                <td className="p-3 text-gray-600 font-medium text-xs sm:text-sm">{u.phone || '—'}</td>
+                <td className="p-3 pr-4 text-gray-500 text-xs sm:text-sm">
                   {u.createdAt?.toDate ? u.createdAt.toDate().toLocaleDateString() : '—'}
                 </td>
               </tr>

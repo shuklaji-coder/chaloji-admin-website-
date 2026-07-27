@@ -134,23 +134,23 @@ export default function Drivers() {
 
   return (
     <div className="animate-in fade-in duration-300">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Driver Management</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Driver Management</h1>
           <p className="text-gray-500 mt-1">Review verifications, track drivers, and enforce platform quality.</p>
         </div>
-        <button onClick={fetchDrivers} className="px-5 py-2.5 bg-white border border-gray-200 shadow-sm rounded-xl text-sm text-gray-700 hover:text-emerald-700 hover:border-emerald-200 transition-all font-semibold flex items-center gap-2">
+        <button onClick={fetchDrivers} className="px-4 py-2 sm:px-5 sm:py-2.5 bg-white border border-gray-200 shadow-sm rounded-xl text-xs sm:text-sm text-gray-700 hover:text-emerald-700 hover:border-emerald-200 transition-all font-semibold flex items-center gap-2">
           <span className="text-lg leading-none">↻</span> Refresh List
         </button>
       </div>
 
       {/* Filter tabs */}
-      <div className="flex flex-wrap gap-2 mb-6 bg-white p-2 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100/50 w-max">
+      <div className="flex flex-wrap gap-2 mb-6 bg-white p-2 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100/50 w-full overflow-x-auto">
         {['all', 'pending', 'approved', 'rejected', 'not_submitted'].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-5 py-2 rounded-xl text-sm font-semibold transition-all ${
+            className={`px-4 py-2 sm:px-5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
               filter === f ? 'bg-gray-900 text-white shadow-md' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-800'
             }`}
           >
@@ -160,10 +160,10 @@ export default function Drivers() {
       </div>
 
       {/* Analytics Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Verification Status</h2>
-          <ResponsiveContainer width="100%" height={250}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4">Verification Status</h2>
+          <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie
                 data={verificationData}
@@ -184,9 +184,9 @@ export default function Drivers() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Vehicle Distribution</h2>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-4">Vehicle Distribution</h2>
+          <ResponsiveContainer width="100%" height={200}>
             <BarChart data={vehicleData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
               <XAxis dataKey="name" stroke="#6B7280" />
@@ -199,61 +199,61 @@ export default function Drivers() {
       </div>
 
       {/* Drivers table */}
-      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 overflow-x-auto">
-        <table className="w-full text-sm min-w-[800px]">
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+        <table className="w-full text-sm min-w-[700px]">
           <thead>
             <tr className="bg-gray-50/80 border-b border-gray-100">
-              <th className="text-left p-4 pl-6 font-bold text-gray-500 uppercase tracking-wider text-xs">Driver Info</th>
-              <th className="text-left p-4 font-bold text-gray-500 uppercase tracking-wider text-xs">Vehicle</th>
-              <th className="text-left p-4 font-bold text-gray-500 uppercase tracking-wider text-xs">Status</th>
-              <th className="text-left p-4 font-bold text-gray-500 uppercase tracking-wider text-xs">KYC Tag</th>
-              <th className="text-left p-4 font-bold text-gray-500 uppercase tracking-wider text-xs">Financials</th>
-              <th className="text-left p-4 pr-6 font-bold text-gray-500 uppercase tracking-wider text-xs">Action</th>
+              <th className="text-left p-3 pl-4 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Driver Info</th>
+              <th className="text-left p-3 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Vehicle</th>
+              <th className="text-left p-3 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Status</th>
+              <th className="text-left p-3 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">KYC Tag</th>
+              <th className="text-left p-3 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Financials</th>
+              <th className="text-left p-3 pr-4 font-bold text-gray-500 uppercase tracking-wider text-[10px] sm:text-xs">Action</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
             {filtered.length === 0 && (
-              <tr><td colSpan={6} className="text-center p-12 text-gray-400 font-medium">No drivers match your criteria.</td></tr>
+              <tr><td colSpan={6} className="text-center p-8 sm:p-12 text-gray-400 font-medium text-xs sm:text-sm">No drivers match your criteria.</td></tr>
             )}
             {filtered.map((d) => (
               <tr key={d.id} className="hover:bg-emerald-50/30 transition-colors group">
-                <td className="p-4 pl-6">
-                  <div className="flex items-center gap-3">
-                    <img src={d.profilePhoto || d.photoURL || 'https://via.placeholder.com/40'} alt="" className="w-10 h-10 rounded-full border border-gray-200 object-cover bg-gray-50" />
+                <td className="p-3 pl-4">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <img src={d.profilePhoto || d.photoURL || 'https://via.placeholder.com/40'} alt="" className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-gray-200 object-cover bg-gray-50" />
                     <div>
                       <button
                         onClick={() => setSelectedDriver(d)}
-                        className="font-bold text-gray-900 group-hover:text-emerald-700 transition-colors"
+                        className="font-bold text-gray-900 group-hover:text-emerald-700 transition-colors text-xs sm:text-sm"
                       >
                         {d.name || 'Skipped Name'}
                       </button>
-                      <p className="text-xs text-gray-500 font-medium mt-0.5">{d.phone || 'No Phone'}</p>
+                      <p className="text-[10px] sm:text-xs text-gray-500 font-medium mt-0.5">{d.phone || 'No Phone'}</p>
                     </div>
                   </div>
                 </td>
-                <td className="p-4">
-                  <span className="capitalize font-semibold text-gray-800">{d.vehicleType || '—'}</span>
-                  {d.plateText && <p className="text-xs text-gray-500 font-medium mt-0.5">{d.plateText}</p>}
+                <td className="p-3">
+                  <span className="capitalize font-semibold text-gray-800 text-xs sm:text-sm">{d.vehicleType || '—'}</span>
+                  {d.plateText && <p className="text-[10px] sm:text-xs text-gray-500 font-medium mt-0.5">{d.plateText}</p>}
                 </td>
-                <td className="p-4">
-                  <div className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-full border ${d.isOnline ? 'bg-green-50 border-green-100 text-green-700' : 'bg-gray-50 border-gray-200 text-gray-600'}`}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${d.isOnline ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-gray-400'}`} />
-                    <span className="text-[11px] font-bold tracking-wide uppercase">{d.isOnline ? 'Online' : 'Offline'}</span>
+                <td className="p-3">
+                  <div className={`inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border ${d.isOnline ? 'bg-green-50 border-green-100 text-green-700' : 'bg-gray-50 border-gray-200 text-gray-600'}`}>
+                    <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${d.isOnline ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-gray-400'}`} />
+                    <span className="text-[9px] sm:text-[11px] font-bold tracking-wide uppercase">{d.isOnline ? 'Online' : 'Offline'}</span>
                   </div>
                 </td>
-                <td className="p-4">
-                  <span className={`inline-block px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider ${getBadge(d.verificationStatus)}`}>
+                <td className="p-3">
+                  <span className={`inline-block px-2 sm:px-3 py-0.5 sm:py-1 rounded-lg text-[9px] sm:text-[11px] font-bold uppercase tracking-wider ${getBadge(d.verificationStatus)}`}>
                     {d.verificationStatus || 'N/A'}
                   </span>
                 </td>
-                <td className="p-4">
+                <td className="p-3">
                   <div className="space-y-0.5">
-                    <p className="font-bold text-emerald-700 text-xs">E: ₹{(d.earnings || 0).toLocaleString()}</p>
-                    <p className={`font-bold text-xs ${d.totalDueAmount ? 'text-rose-600' : 'text-gray-400'}`}>D: ₹{(d.totalDueAmount || 0).toLocaleString()}</p>
+                    <p className="font-bold text-emerald-700 text-[10px] sm:text-xs">E: ₹{(d.earnings || 0).toLocaleString()}</p>
+                    <p className={`font-bold text-[10px] sm:text-xs ${d.totalDueAmount ? 'text-rose-600' : 'text-gray-400'}`}>D: ₹{(d.totalDueAmount || 0).toLocaleString()}</p>
                   </div>
                 </td>
-                <td className="p-4 pr-6">
-                  <button onClick={() => setSelectedDriver(d)} className="px-4 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 rounded-xl text-xs font-bold transition-colors">
+                <td className="p-3 pr-4">
+                  <button onClick={() => setSelectedDriver(d)} className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 rounded-xl text-[10px] sm:text-xs font-bold transition-colors">
                     Review
                   </button>
                 </td>
