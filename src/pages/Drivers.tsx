@@ -199,8 +199,8 @@ export default function Drivers() {
       </div>
 
       {/* Drivers table */}
-      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 overflow-x-auto">
+        <table className="w-full text-sm min-w-[800px]">
           <thead>
             <tr className="bg-gray-50/80 border-b border-gray-100">
               <th className="text-left p-4 pl-6 font-bold text-gray-500 uppercase tracking-wider text-xs">Driver Info</th>
@@ -265,24 +265,24 @@ export default function Drivers() {
 
       {/* Driver Detail Modal */}
       {selectedDriver && (
-        <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in" onClick={() => setSelectedDriver(null)}>
-          <div className="bg-white rounded-[2rem] shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden flex flex-col transform animate-in slide-in-bottom-4 duration-300" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4 animate-in fade-in" onClick={() => setSelectedDriver(null)}>
+          <div className="bg-white rounded-[2rem] shadow-2xl max-w-2xl w-full max-h-[90vh] sm:max-h-[85vh] overflow-hidden flex flex-col transform animate-in slide-in-bottom-4 duration-300" onClick={(e) => e.stopPropagation()}>
             
             {/* Modal Header */}
-            <div className="px-8 py-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-              <div className="flex items-center gap-4">
-                <img src={selectedDriver.profilePhoto || selectedDriver.photoURL || 'https://via.placeholder.com/60'} alt="Profile" className="w-14 h-14 rounded-full border-2 border-white shadow-md object-cover" />
+            <div className="px-4 sm:px-8 py-4 sm:py-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-gray-50/50">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <img src={selectedDriver.profilePhoto || selectedDriver.photoURL || 'https://via.placeholder.com/60'} alt="Profile" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-white shadow-md object-cover" />
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 tracking-tight">{selectedDriver.name || 'Unknown Driver'}</h2>
-                  <p className="text-sm text-gray-500 font-medium">{selectedDriver.phone}</p>
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">{selectedDriver.name || 'Unknown Driver'}</h2>
+                  <p className="text-xs sm:text-sm text-gray-500 font-medium">{selectedDriver.phone}</p>
                 </div>
               </div>
-              <div className="flex flex-col items-end gap-2">
+              <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between gap-2 sm:gap-2">
                 <div className="flex items-center gap-2">
-                  <span className={`px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-sm ${selectedDriver.accountStatus === 'suspended' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
+                  <span className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider shadow-sm ${selectedDriver.accountStatus === 'suspended' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
                      {selectedDriver.accountStatus === 'suspended' ? 'SUSPENDED' : 'ACTIVE'}
                   </span>
-                  <span className={`px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-sm ${getBadge(selectedDriver.verificationStatus)}`}>
+                  <span className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider shadow-sm ${getBadge(selectedDriver.verificationStatus)}`}>
                     {selectedDriver.verificationStatus || 'Unknown KYC'}
                   </span>
                 </div>
@@ -291,9 +291,9 @@ export default function Drivers() {
             </div>
 
             {/* Modal Body */}
-            <div className="p-8 overflow-y-auto custom-scrollbar">
+            <div className="p-4 sm:p-8 overflow-y-auto custom-scrollbar">
               
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
                   <span className="block text-xs uppercase tracking-wider text-gray-500 font-bold mb-1">Vehicle</span>
                   <p className="font-bold text-gray-900 capitalize">{selectedDriver.vehicleType || '—'} <br/><span className="text-gray-500 font-medium text-sm">{selectedDriver.plateText || '—'}</span></p>
@@ -343,25 +343,25 @@ export default function Drivers() {
             </div>
 
              {/* Modal Actions */}
-             <div className="px-8 py-5 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <button onClick={() => deleteDriver(selectedDriver.id)} className="px-5 py-2.5 text-rose-600 hover:bg-rose-50 rounded-xl text-sm font-bold transition-colors">
+             <div className="px-4 sm:px-8 py-4 sm:py-5 bg-gray-50/50 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex flex-row sm:flex-col items-center sm:items-start justify-center sm:justify-start gap-2 sm:gap-3 w-full sm:w-auto">
+                  <button onClick={() => deleteDriver(selectedDriver.id)} className="px-4 py-2 sm:px-5 sm:py-2.5 text-rose-600 hover:bg-rose-50 rounded-xl text-xs sm:text-sm font-bold transition-colors">
                     Delete Driver...
                   </button>
                   <button 
                     onClick={() => toggleAccountStatus(selectedDriver.id, selectedDriver.accountStatus || 'active')} 
-                    className={`border px-5 py-2.5 rounded-xl text-sm font-bold transition-colors ${selectedDriver.accountStatus === 'suspended' ? 'text-amber-700 border-amber-200 bg-amber-50 hover:bg-amber-100' : 'text-rose-700 border-rose-200 bg-rose-50 hover:bg-rose-100'}`}
+                    className={`border px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-colors ${selectedDriver.accountStatus === 'suspended' ? 'text-amber-700 border-amber-200 bg-amber-50 hover:bg-amber-100' : 'text-rose-700 border-rose-200 bg-rose-50 hover:bg-rose-100'}`}
                   >
                     {selectedDriver.accountStatus === 'suspended' ? 'Unfreeze Account' : 'Freeze Account'}
                   </button>
                 </div>
 
                 {selectedDriver.verificationStatus !== 'approved' && (
-                  <div className="flex items-center gap-3">
-                    <button onClick={() => updateVerification(selectedDriver.id, 'rejected')} className="px-6 py-2.5 bg-white border-2 border-rose-200 text-rose-700 hover:bg-rose-50 hover:border-rose-300 rounded-xl font-bold transition-all shadow-sm">
+                  <div className="flex flex-row sm:flex-col items-center justify-center gap-2 sm:gap-3 w-full sm:w-auto">
+                    <button onClick={() => updateVerification(selectedDriver.id, 'rejected')} className="px-4 py-2 sm:px-6 sm:py-2.5 bg-white border-2 border-rose-200 text-rose-700 hover:bg-rose-50 hover:border-rose-300 rounded-xl font-bold transition-all shadow-sm text-xs sm:text-sm">
                       Reject Application
                     </button>
-                    <button onClick={() => updateVerification(selectedDriver.id, 'approved')} className="px-8 py-2.5 bg-emerald-600 text-white hover:bg-emerald-700 rounded-xl font-bold transition-all shadow-[0_4px_14px_rgba(5,150,105,0.4)]">
+                    <button onClick={() => updateVerification(selectedDriver.id, 'approved')} className="px-4 py-2 sm:px-8 sm:py-2.5 bg-emerald-600 text-white hover:bg-emerald-700 rounded-xl font-bold transition-all shadow-[0_4px_14px_rgba(5,150,105,0.4)] text-xs sm:text-sm">
                       Approve Driver
                     </button>
                   </div>

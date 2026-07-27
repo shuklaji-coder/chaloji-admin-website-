@@ -210,9 +210,9 @@ export default function Rides() {
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 overflow-hidden">
+      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 overflow-x-auto">
 
-        <table className="w-full text-sm">
+        <table className="w-full text-sm min-w-[800px]">
 
           <thead>
 

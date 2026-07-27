@@ -120,8 +120,8 @@ export default function Users() {
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/60 overflow-x-auto">
+        <table className="w-full text-sm min-w-[600px]">
           <thead>
             <tr className="bg-gray-50/80 border-b border-gray-100">
               <th className="text-left p-4 pl-6 font-bold text-gray-500 uppercase tracking-wider text-xs">User ID</th>
