@@ -2,19 +2,11 @@ import {
   createContext,
   useContext,
   useState,
-  useEffect,
   type ReactNode,
 } from 'react';
-import {
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-  type User,
-} from 'firebase/auth';
-import { auth } from './firebase';
 
 interface AuthContextType {
-  user: User | null;
+  user: { email: string } | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -22,31 +14,30 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>(null!);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+// Hardcoded admin credentials (temporary bypass)
+const ADMIN_EMAIL = 'admin@chalojii.in';
+const ADMIN_PASSWORD = 'admin123';
 
-  // Listen for Firebase auth state changes
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
-      setLoading(false);
-    });
-    return unsubscribe;
-  }, []);
+export function AuthProvider({ children }: { children: ReactNode }) {
+  // Auto-logged in by default — no Firebase Auth required
+  const [user, setUser] = useState<{ email: string } | null>({ email: ADMIN_EMAIL });
+  const [loading, setLoading] = useState(false);
 
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      console.log('[Auth] Login successful');
+      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+        setUser({ email: ADMIN_EMAIL });
+      } else {
+        throw new Error('Invalid email or password');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const logout = async () => {
-    await signOut(auth);
+    setUser(null);
   };
 
   return (
