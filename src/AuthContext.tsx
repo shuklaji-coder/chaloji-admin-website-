@@ -1,95 +1,61 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
-
-
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from 'react';
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  type User,
+} from 'firebase/auth';
+import { auth } from './firebase';
 
 interface AuthContextType {
-
-  user: { email: string } | null;
-
+  user: User | null;
   loading: boolean;
-
   login: (email: string, password: string) => Promise<void>;
-
   logout: () => Promise<void>;
-
 }
-
-
 
 const AuthContext = createContext<AuthContextType>(null!);
 
-
-
-// Hardcoded admin credentials
-const ADMIN_EMAIL = 'admin@chalojii.in';
-const ADMIN_PASSWORD = 'admin123';
-
-
-
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const [user, setUser] = useState<{ email: string } | null>(null);
-
-  const [loading, setLoading] = useState(false);
-
-
+  // Listen for Firebase auth state changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+      setLoading(false);
+    });
+    return unsubscribe;
+  }, []);
 
   const login = async (email: string, password: string) => {
-
     setLoading(true);
-
-    console.log('[Auth] Login attempt:', email, password);
-    console.log('[Auth] Expected:', ADMIN_EMAIL, ADMIN_PASSWORD);
-
     try {
-
-      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-
-        console.log('[Auth] Login successful');
-        setUser({ email: ADMIN_EMAIL });
-
-      } else {
-
-        console.log('[Auth] Invalid credentials');
-        throw new Error('Invalid email or password');
-
-      }
-
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log('[Auth] Login successful');
     } finally {
-
       setLoading(false);
-
     }
-
   };
-
-
 
   const logout = async () => {
-
-    setUser(null);
-
+    await signOut(auth);
   };
 
-
-
   return (
-
     <AuthContext.Provider value={{ user, loading, login, logout }}>
-
       {children}
-
     </AuthContext.Provider>
-
   );
-
 }
-
-
 
 export function useAuth() {
-
   return useContext(AuthContext);
-
 }
-

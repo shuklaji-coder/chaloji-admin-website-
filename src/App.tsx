@@ -29,9 +29,7 @@ import Feedback from './pages/Feedback';
 
 function PrivateLayout({ children }: { children: React.ReactNode }) {
 
-  const { user } = useAuth();
-
-  const logout = () => { window.location.href = '/'; };
+  const { user, logout } = useAuth();
 
   if (!user) {
     return <Navigate to="/login" replace />;
