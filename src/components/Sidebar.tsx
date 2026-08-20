@@ -8,6 +8,7 @@ const links = [
   { to: '/users', label: 'Passengers', icon: '👤' },
   { to: '/promo-codes', label: 'Promo Codes', icon: '🏷️' },
   { to: '/settlements', label: 'Settlements', icon: '💰' },
+  { to: '/baraat-bookings', label: 'Baraat Bookings', icon: '🥁' },
 ];
 
 export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -37,6 +38,31 @@ export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose:
             key={l.to}
             to={l.to}
             end={l.to === '/'}
+            onClick={() => onClose()}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors ${
+                isActive
+                  ? 'bg-emerald-700 text-white font-semibold'
+                  : 'text-emerald-200 hover:bg-emerald-800 hover:text-white'
+              }`
+            }
+          >
+            <span>{l.icon}</span>
+            <span>{l.label}</span>
+          </NavLink>
+        ))}
+
+        <div className="pt-3 pb-1 px-4 text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
+          ChaloJi Sharing
+        </div>
+        {[
+          { to: '/sharing/routes', label: 'Routes', icon: '🛺' },
+          { to: '/sharing/points', label: 'Pickup Points', icon: '📍' },
+          { to: '/sharing/fares', label: 'Fixed Fares', icon: '💰' },
+        ].map((l) => (
+          <NavLink
+            key={l.to}
+            to={l.to}
             onClick={() => onClose()}
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors ${

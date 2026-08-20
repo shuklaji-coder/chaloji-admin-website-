@@ -25,6 +25,15 @@ import Broadcasts from './pages/Broadcasts';
 
 import Feedback from './pages/Feedback';
 
+import SharingRoutes from './pages/Sharing/Routes';
+
+import SharingPoints from './pages/Sharing/Points';
+
+import SharingFares from './pages/Sharing/Fares';
+
+import BaraatBookings from './pages/BaraatBookings';
+import OutstationBookings from './pages/OutstationBookings';
+
 
 
 function PrivateLayout({ children }: { children: React.ReactNode }) {
@@ -103,11 +112,39 @@ function PrivateLayout({ children }: { children: React.ReactNode }) {
 
           </Link>
 
+          <Link to="/baraat-bookings" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+
+            <span className="text-emerald-400 group-hover:text-emerald-300">🥁</span> Baraat Bookings
+
+          </Link>
+
+          <Link to="/outstation-bookings" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+
+            <span className="text-emerald-400 group-hover:text-emerald-300">✈️</span> Outstation Rides
+
+          </Link>
+
           
 
           <div className="h-px bg-white/10 my-2 mx-4"></div>
 
-          
+          <div className="px-4 text-[10px] font-bold text-emerald-400 uppercase tracking-wider mt-1">
+            ChaloJi Sharing
+          </div>
+
+          <Link to="/sharing/routes" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
+            <span className="text-emerald-400 group-hover:text-emerald-300">🛺</span> Routes
+          </Link>
+
+          <Link to="/sharing/points" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
+            <span className="text-emerald-400 group-hover:text-emerald-300">📍</span> Pickup Points
+          </Link>
+
+          <Link to="/sharing/fares" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
+            <span className="text-emerald-400 group-hover:text-emerald-300">💰</span> Fixed Fares
+          </Link>
+
+          <div className="h-px bg-white/10 my-2 mx-4"></div>
 
           <Link to="/broadcasts" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
 
@@ -193,6 +230,16 @@ function App() {
           <Route path="/revenue" element={<PrivateLayout><Revenue /></PrivateLayout>} />
 
           <Route path="/dues" element={<PrivateLayout><Dues /></PrivateLayout>} />
+
+          <Route path="/baraat-bookings" element={<PrivateLayout><BaraatBookings /></PrivateLayout>} />
+
+          <Route path="/outstation-bookings" element={<PrivateLayout><OutstationBookings /></PrivateLayout>} />
+
+          <Route path="/sharing/routes" element={<PrivateLayout><SharingRoutes /></PrivateLayout>} />
+
+          <Route path="/sharing/points" element={<PrivateLayout><SharingPoints /></PrivateLayout>} />
+
+          <Route path="/sharing/fares" element={<PrivateLayout><SharingFares /></PrivateLayout>} />
 
           <Route path="/broadcasts" element={<PrivateLayout><Broadcasts /></PrivateLayout>} />
 
