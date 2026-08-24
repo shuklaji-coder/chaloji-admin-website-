@@ -1,9 +1,17 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useState,
   type ReactNode,
 } from 'react';
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  type User,
+} from 'firebase/auth';
+import { auth } from './firebase';
 
 interface AuthContextType {
   user: { email: string } | null;
@@ -14,35 +22,44 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>(null!);
 
-// Hardcoded admin credentials (temporary bypass)
-const ADMIN_EMAIL = 'admin@chalojii.in';
-const ADMIN_PASSWORD = 'admin123';
+const FRIENDLY_ERRORS: Record<string, string> = {
+  'auth/invalid-credential': 'Invalid email or password',
+  'auth/user-not-found': 'Invalid email or password',
+  'auth/wrong-password': 'Invalid email or password',
+  'auth/too-many-requests':
+    'Too many attempts. Please try again later.',
+  'auth/user-disabled': 'This account has been disabled.',
+};
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // Auto-logged in by default — no Firebase Auth required
-  const [user, setUser] = useState<{ email: string } | null>({ email: ADMIN_EMAIL });
-  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<{ email: string } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser: User | null) => {
+      setUser(firebaseUser ? { email: firebaseUser.email ?? '' } : null);
+      setLoading(false);
+    });
+    return unsubscribe;
+  }, []);
 
   const login = async (email: string, password: string) => {
-    setLoading(true);
     try {
-      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-        setUser({ email: ADMIN_EMAIL });
-      } else {
-        throw new Error('Invalid email or password');
-      }
-    } finally {
-      setLoading(false);
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err: any) {
+      throw new Error(
+        FRIENDLY_ERRORS[err?.code] || err?.message || 'Login failed'
+      );
     }
   };
 
   const logout = async () => {
-    setUser(null);
+    await signOut(auth);
   };
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout }}>
-      {children}
+      {loading ? null : children}
     </AuthContext.Provider>
   );
 }

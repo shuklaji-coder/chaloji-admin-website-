@@ -1,0 +1,12 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Admin panel: any signed-in Firebase Auth user can access everything.
+    // Tighten later with custom claims (request.auth.token.admin == true).
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
