@@ -7,7 +7,7 @@ import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
 
-  apiKey: 'AIzaSyCg9fShNFTiJMIREhwBggb1vlvh8cuuQCI',
+  apiKey: 'AIzaSyDxmWd_owgcPxyrJ0ARRDupqSzGmFcLFN4',
 
   authDomain: 'chalojii-79c99.firebaseapp.com',
 
