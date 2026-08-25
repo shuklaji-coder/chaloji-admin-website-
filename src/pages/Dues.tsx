@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -70,7 +70,13 @@ export default function Dues() {
     setClearing(driverId);
     try {
       await updateDoc(doc(db, 'drivers', driverId), {
-        totalDueAmount: 0
+        totalDueAmount: 0,
+        dueSince: null,
+        paymentHistory: arrayUnion({
+          amount: currentDue,
+          clearedAt: new Date().toISOString(),
+          clearedBy: 'admin',
+        }),
       });
       setDrivers(prev => prev.filter(d => d.id !== driverId));
     } catch (e) {

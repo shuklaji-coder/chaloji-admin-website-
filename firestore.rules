@@ -28,21 +28,27 @@ service cloud.firestore {
     match /drivers/{userId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && request.auth.uid == userId;
-      allow update: if isAuthenticated() && request.auth.uid == userId
-        && (
-          !request.resource.data.diff(resource.data).affectedKeys()
-              .hasAny([
-                'totalDueAmount', 'dueSince', 'paymentHistory', 'commissionPaid',
-                'verificationStatus', 'accountStatus', 'earnings', 'totalRides',
-                'registrationCompleted', 'paymentVerificationPending'
-              ])
-          || (
-            resource.data.verificationStatus == 'not_submitted'
-            && request.resource.data.verificationStatus == 'pending'
-            && (!('registrationCompleted' in resource.data) || resource.data.registrationCompleted == false)
-            && request.resource.data.registrationCompleted == true
-          )
-        );
+      allow update: if isAuthenticated()
+        && (request.auth.uid == userId
+            && (
+              !request.resource.data.diff(resource.data).affectedKeys()
+                  .hasAny([
+                    'totalDueAmount', 'dueSince', 'paymentHistory', 'commissionPaid',
+                    'verificationStatus', 'accountStatus', 'earnings', 'totalRides',
+                    'registrationCompleted', 'paymentVerificationPending'
+                  ])
+              || (
+                resource.data.verificationStatus == 'not_submitted'
+                && request.resource.data.verificationStatus == 'pending'
+                && (!('registrationCompleted' in resource.data) || resource.data.registrationCompleted == false)
+                && request.resource.data.registrationCompleted == true
+              )
+            )
+         || (isAdmin()
+             && request.resource.data.diff(resource.data).affectedKeys()
+                 .hasAny([
+                   'totalDueAmount', 'dueSince', 'paymentHistory', 'commissionPaid'
+                 ])));
       allow delete: if false;
     }
 
