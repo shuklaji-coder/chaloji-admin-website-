@@ -272,12 +272,14 @@ export default function Login() {
         </form>
 
         {/* Footer */}
-        <p style={{
-          textAlign: 'center', marginTop: 28,
-          fontSize: 12, color: 'rgba(255,255,255,0.2)',
-        }}>
-          ChaloJi Admin © 2025 · Authorized Access Only
-        </p>
+        <div style={{ textAlign: 'center', marginTop: 28 }}>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.2)', margin: 0 }}>
+            ChaloJi Admin © 2026 · Authorized Access Only
+          </p>
+          <p style={{ fontSize: 11, color: 'rgba(16,185,129,0.4)', marginTop: 6 }}>
+            🔐 Secured with Firebase Auth
+          </p>
+        </div>
       </div>
 
       {/* ── Keyframes ── */}
