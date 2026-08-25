@@ -1,12 +1,296 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Admin panel: any signed-in Firebase Auth user can access everything.
-    // Tighten later with custom claims (request.auth.token.admin == true).
-    match /{document=**} {
-      allow read, write: if request.auth != null;
+    // ─── HELPERS ──────────────────────────────────────────────────────────
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated()
+        && (request.auth.token.admin == true
+         || request.auth.token.email == 'shuklarohan388@gmail.com'
+         || request.auth.token.email == 'admin@chalojii.in'
+         || request.auth.token.email == 'chaloji.admin@gmail.com');
+    }
+
+    // ─── USERS ────────────────────────────────────────────────────────────
+
+    match /users/{userId} {
+      allow read, write: if isAuthenticated()
+        && (request.auth.uid == userId || isAdmin());
+    }
+
+    // ─── DRIVERS ──────────────────────────────────────────────────────────
+
+    match /drivers/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isAuthenticated() && request.auth.uid == userId
+        && (
+          !request.resource.data.diff(resource.data).affectedKeys()
+              .hasAny([
+                'totalDueAmount', 'dueSince', 'paymentHistory', 'commissionPaid',
+                'verificationStatus', 'accountStatus', 'earnings', 'totalRides',
+                'registrationCompleted', 'paymentVerificationPending'
+              ])
+          || (
+            resource.data.verificationStatus == 'not_submitted'
+            && request.resource.data.verificationStatus == 'pending'
+            && (!('registrationCompleted' in resource.data) || resource.data.registrationCompleted == false)
+            && request.resource.data.registrationCompleted == true
+          )
+        );
+      allow delete: if false;
+    }
+
+    // ─── RIDES ────────────────────────────────────────────────────────────
+
+    match /rides/{rideId} {
+      allow read: if isAuthenticated()
+        && (resource.data.status == 'requested'
+         || resource.data.driverId == request.auth.uid
+         || resource.data.passengerId == request.auth.uid
+         || (resource.data.participantIds != null
+             && request.auth.uid in resource.data.participantIds)
+         || isAdmin());
+
+      allow create: if false;
+
+      allow update: if isAuthenticated()
+        && (resource.data.driverId == request.auth.uid
+         || resource.data.passengerId == request.auth.uid
+         || (resource.data.participantIds != null
+             && request.auth.uid in resource.data.participantIds)
+         || (resource.data.status == 'requested'
+             && resource.data.isScheduled != true
+             && resource.data.driverId == null
+             && request.resource.data.driverId == request.auth.uid)
+         || isAdmin())
+        && (resource.data.isScheduled != true
+         || resource.data.driverId == request.auth.uid
+         || isAdmin()
+         || request.resource.data.status == resource.data.status
+         || request.resource.data.status == 'cancelled')
+        && !request.resource.data.diff(resource.data).affectedKeys()
+            .hasAny([
+              'otp', 'fare', 'originalFare', 'discountPct', 'commission',
+              'paymentStatus', 'commissionAmount', 'commissionPercentage',
+              'driverEarning', 'paymentVerifiedAt', 'razorpayPaymentId',
+              'dispatchedAt', 'dispatchedLeadMin'
+            ]);
+
+      allow delete: if false;
+    }
+
+    // ─── RIDE MATCHES ─────────────────────────────────────────────────────
+
+    match /rideMatches/{passengerId} {
+      allow read, delete: if isAuthenticated()
+        && request.auth.uid == passengerId;
+      allow create, update: if isAuthenticated()
+        && request.resource.data.passengerId == request.auth.uid;
+    }
+
+    // ─── RETURN INTENTS ───────────────────────────────────────────────────
+
+    match /returnIntents/{passengerId} {
+      allow read: if isAuthenticated()
+        && request.auth.uid == passengerId;
+      allow create, update, delete: if false;
+    }
+
+    // ─── RETURN OPPORTUNITIES ─────────────────────────────────────────────
+
+    match /returnOpportunities/{oppId} {
+      allow read: if isAuthenticated()
+        && resource.data.driverId == request.auth.uid;
+      allow create, update, delete: if false;
+
+      match /matches/{passengerId} {
+        allow read: if isAuthenticated()
+          && get(/databases/$(database)/documents/returnOpportunities/$(oppId)).data.driverId
+             == request.auth.uid;
+        allow create, update, delete: if false;
+      }
+    }
+
+    // ─── SHARED RIDES ─────────────────────────────────────────────────────
+
+    match /sharedRides/{sharedRideId} {
+      allow read: if isAuthenticated()
+        && (resource.data.hostId == request.auth.uid
+         || (resource.data.participantIds != null
+             && request.auth.uid in resource.data.participantIds)
+         || isAdmin());
+      allow create: if isAuthenticated()
+        && request.resource.data.hostId == request.auth.uid
+        && request.resource.data.status == 'pending';
+      allow update: if isAuthenticated()
+        && resource.data.hostId == request.auth.uid;
+      allow delete: if false;
+
+      match /participants/{uid} {
+        allow read: if isAuthenticated()
+          && (request.auth.uid == uid
+           || request.auth.uid == resource.data.passengerId
+           || get(/databases/$(database)/documents/sharedRides/$(sharedRideId)).data.hostId == request.auth.uid);
+        allow create, update, delete: if isAuthenticated()
+          && request.auth.uid == uid;
+      }
+    }
+
+    // ─── PAYMENTS ─────────────────────────────────────────────────────────
+
+    match /payments/{paymentId} {
+      allow read: if isAuthenticated()
+        && (resource.data.driverId == request.auth.uid
+         || resource.data.passengerId == request.auth.uid
+         || isAdmin());
+      allow create, update, delete: if false;
+    }
+
+    // ─── DRIVER LOCATIONS ─────────────────────────────────────────────────
+
+    match /driverLocations/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // ─── SAVED LOCATIONS ──────────────────────────────────────────────────
+
+    match /savedLocations/{savedLocationId} {
+      allow read: if isAuthenticated()
+        && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated()
+        && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuthenticated()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // ─── PASSENGERS ───────────────────────────────────────────────────────
+
+    match /passengers/{passengerId} {
+      allow read, write: if isAuthenticated()
+        && request.auth.uid == passengerId;
+    }
+
+    // ─── EVENTS ───────────────────────────────────────────────────────────
+
+    match /events/{eventId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ─── EVENT BOOKINGS ───────────────────────────────────────────────────
+
+    match /eventBookings/{bookingId} {
+      allow read: if isAuthenticated()
+        && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated()
+        && request.resource.data.userId == request.auth.uid;
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    // ─── BARAAT BOOKINGS ──────────────────────────────────────────────────
+
+    match /baraatBookings/{bookingId} {
+      allow read: if isAuthenticated()
+        && (resource.data.userId == request.auth.uid
+         || resource.data.passengerId == request.auth.uid
+         || isAdmin());
+
+      allow create: if isAuthenticated()
+        && (request.resource.data.userId == request.auth.uid
+         || request.resource.data.passengerId == request.auth.uid)
+        && (request.resource.data.status == 'NEW' || request.resource.data.status == null)
+        && (request.resource.data.quotedAmount == null || request.resource.data.quotedAmount == 0)
+        && (request.resource.data.paymentStatus == null
+         || request.resource.data.paymentStatus == 'UNPAID'
+         || request.resource.data.paymentStatus == 'unpaid');
+
+      allow update: if isAdmin()
+        || (isAuthenticated()
+            && (resource.data.userId == request.auth.uid
+             || resource.data.passengerId == request.auth.uid)
+            && (resource.data.status == 'QUOTED' || resource.data.status == 'NEW')
+            && (request.resource.data.status == 'CUSTOMER_ACCEPTED'
+             || request.resource.data.status == 'PAYMENT_PENDING'
+             || request.resource.data.status == 'NEW')
+            && !request.resource.data.diff(resource.data).affectedKeys()
+                .hasAny([
+                  'quotedAmount', 'paymentStatus', 'adminNotes', 'createdAt',
+                  'contactedAt', 'quotedAt', 'confirmedAt'
+                ]));
+
+      allow delete: if false;
+
+      match /assignments/{assignmentId} {
+        allow read: if isAuthenticated()
+          && (get(/databases/$(database)/documents/baraatBookings/$(bookingId)).data.userId == request.auth.uid
+           || get(/databases/$(database)/documents/baraatBookings/$(bookingId)).data.passengerId == request.auth.uid
+           || resource.data.driverId == request.auth.uid
+           || isAdmin());
+        allow create, update, delete: if isAdmin();
+      }
+    }
+
+    // ─── OUTSTATION BOOKINGS ──────────────────────────────────────────────
+
+    match /outstationBookings/{bookingId} {
+      allow read: if isAuthenticated()
+        && (resource.data.userId == request.auth.uid
+         || resource.data.passengerId == request.auth.uid
+         || isAdmin());
+
+      allow create: if isAuthenticated()
+        && (request.resource.data.userId == request.auth.uid
+         || request.resource.data.passengerId == request.auth.uid)
+        && (request.resource.data.status == 'PENDING'
+         || request.resource.data.status == 'NEW'
+         || request.resource.data.status == null);
+
+      allow update: if isAdmin()
+        || (isAuthenticated()
+            && (resource.data.userId == request.auth.uid
+             || resource.data.passengerId == request.auth.uid)
+            && (request.resource.data.status == 'CANCELLED'
+             || resource.data.status == 'PENDING'));
+
+      allow delete: if false;
+    }
+
+    // ─── NOTIFICATIONS ────────────────────────────────────────────────────
+
+    match /notifications/{notificationId} {
+      allow read, update, delete: if isAuthenticated()
+        && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated()
+        && request.resource.data.userId == request.auth.uid;
+    }
+
+    // ─── PROMO CODES ──────────────────────────────────────────────────────
+
+    match /promoCodes/{codeId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── WHATSAPP (Admin SDK only) ────────────────────────────────────────
+
+    match /whatsappSessions/{phoneNumber} {
+      allow read, write: if false;
+    }
+
+    match /whatsappUsers/{phoneNumber} {
+      allow read, write: if false;
+    }
+
+    match /whatsappProcessedMessages/{messageId} {
+      allow read, write: if false;
     }
   }
 }

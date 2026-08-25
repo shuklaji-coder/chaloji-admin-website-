@@ -6,29 +6,34 @@ import {
   type ReactNode,
 } from 'react';
 import {
-  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
   signOut,
   onAuthStateChanged,
   type User,
 } from 'firebase/auth';
 import { auth } from './firebase';
 
+export const ADMIN_EMAIL = 'shuklarohan388@gmail.com';
+
 interface AuthContextType {
   user: { email: string } | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>(null!);
 
 const FRIENDLY_ERRORS: Record<string, string> = {
-  'auth/invalid-credential': 'Invalid email or password',
-  'auth/user-not-found': 'Invalid email or password',
-  'auth/wrong-password': 'Invalid email or password',
-  'auth/too-many-requests':
-    'Too many attempts. Please try again later.',
-  'auth/user-disabled': 'This account has been disabled.',
+  'auth/popup-closed-by-user': 'Sign-in window was closed before finishing.',
+  'auth/cancelled-popup-request': 'Sign-in was cancelled.',
+  'auth/popup-blocked':
+    'Popup blocked by browser. Please allow popups for this site.',
+  'auth/unauthorized-domain':
+    'This domain is not authorized for sign-in. Add it in Firebase Console.',
+  'auth/operation-not-allowed':
+    'Google sign-in is not enabled in Firebase Console.',
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -43,12 +48,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return unsubscribe;
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const result = await signInWithPopup(auth, provider);
+      const email = result.user.email?.toLowerCase() ?? '';
+      if (email !== ADMIN_EMAIL) {
+        await signOut(auth);
+        throw new Error(
+          'Access denied. Only the authorized admin account can sign in.'
+        );
+      }
     } catch (err: any) {
       throw new Error(
-        FRIENDLY_ERRORS[err?.code] || err?.message || 'Login failed'
+        FRIENDLY_ERRORS[err?.code] || err?.message || 'Google sign-in failed'
       );
     }
   };
@@ -58,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, loginWithGoogle, logout }}>
       {loading ? null : children}
     </AuthContext.Provider>
   );
