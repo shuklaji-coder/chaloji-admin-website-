@@ -148,30 +148,30 @@ export default function OutstationBookings() {
   return (
     <div className="animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-8">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-2 sm:gap-3">
             <span>✈️</span>
             <span>Outstation Ride Requests</span>
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-gray-500 mt-1 text-xs sm:text-sm">
             Manage intercity ride bookings — contact customers and send quotes.
           </p>
         </div>
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
         {[
           { label: 'Total Requests', value: total, color: 'bg-slate-50 border-slate-200', text: 'text-slate-900', icon: '📋' },
           { label: 'Pending', value: pending, color: 'bg-blue-50 border-blue-200', text: 'text-blue-900', icon: '🕐' },
           { label: 'Confirmed', value: confirmed, color: 'bg-emerald-50 border-emerald-200', text: 'text-emerald-900', icon: '✅' },
           { label: 'Completed', value: completed, color: 'bg-gray-50 border-gray-200', text: 'text-gray-900', icon: '🏁' },
         ].map((stat) => (
-          <div key={stat.label} className={`${stat.color} border rounded-2xl p-4`}>
-            <div className="text-2xl mb-1">{stat.icon}</div>
-            <div className={`text-2xl font-black ${stat.text}`}>{stat.value}</div>
-            <div className="text-xs text-gray-500 font-medium mt-0.5">{stat.label}</div>
+          <div key={stat.label} className={`${stat.color} border rounded-2xl p-3 sm:p-4`}>
+            <div className="text-xl sm:text-2xl mb-1">{stat.icon}</div>
+            <div className={`text-xl sm:text-2xl font-black ${stat.text}`}>{stat.value}</div>
+            <div className="text-[10px] sm:text-xs text-gray-500 font-medium mt-0.5">{stat.label}</div>
           </div>
         ))}
       </div>
@@ -184,10 +184,10 @@ export default function OutstationBookings() {
             placeholder="Search by name, phone, pickup, or destination..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-sky-500 transition-all"
+            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-sky-500 transition-all"
           />
         </div>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1.5 overflow-x-auto custom-scrollbar pb-1 md:pb-0">
           {[
             { id: 'ALL', label: 'All' },
             { id: 'PENDING', label: 'Pending' },
@@ -198,7 +198,7 @@ export default function OutstationBookings() {
             <button
               key={tab.id}
               onClick={() => setFilter(tab.id)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ${
+              className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold transition-all whitespace-nowrap ${
                 filter === tab.id
                   ? 'bg-gray-900 text-white shadow-md'
                   : 'bg-gray-50 text-gray-600 hover:bg-gray-100'

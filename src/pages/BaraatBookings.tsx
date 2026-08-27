@@ -251,13 +251,13 @@ export default function BaraatBookings() {
   return (
     <div className="animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-8">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-2 sm:gap-3">
             <span>🥁</span>
-            <span>ChaloJi Baraat & Multi-Vehicle Event Bookings</span>
+            <span>ChaloJi Baraat & Multi-Vehicle Events</span>
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-gray-500 mt-1 text-xs sm:text-sm">
             Manage bulk vehicle requests for weddings, baraat processions & special functions.
           </p>
         </div>
@@ -271,13 +271,13 @@ export default function BaraatBookings() {
             placeholder="Search passenger, phone, event, or location..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-emerald-500 transition-all"
+            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-emerald-500 transition-all"
           />
         </div>
-        <div className="flex flex-wrap gap-1.5 overflow-x-auto">
+        <div className="flex flex-wrap gap-1.5 overflow-x-auto custom-scrollbar pb-1 md:pb-0">
           {[
-            { id: 'ALL', label: 'All Requests' },
-            { id: 'NEW', label: 'New Requests' },
+            { id: 'ALL', label: 'All' },
+            { id: 'NEW', label: 'New' },
             { id: 'QUOTED', label: 'Quoted' },
             { id: 'CONFIRMED', label: 'Confirmed' },
             { id: 'COMPLETED', label: 'Completed' },
@@ -285,7 +285,7 @@ export default function BaraatBookings() {
             <button
               key={tab.id}
               onClick={() => setFilter(tab.id)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ${
+              className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold transition-all whitespace-nowrap ${
                 filter === tab.id
                   ? 'bg-gray-900 text-white shadow-md'
                   : 'bg-gray-50 text-gray-600 hover:bg-gray-100'

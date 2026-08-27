@@ -36,89 +36,137 @@ import OutstationBookings from './pages/OutstationBookings';
 
 
 
+import { useState } from 'react';
+
 function PrivateLayout({ children }: { children: React.ReactNode }) {
 
   const { user, logout } = useAuth();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-
+  const closeMenu = () => setIsMobileMenuOpen(false);
 
   return (
 
-    <div className="min-h-screen bg-[#F8FAFC] flex font-sans">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col lg:flex-row font-sans">
 
-      {/* Premium Sidebar */}
+      {/* Mobile Sticky Topbar */}
+      <div className="lg:hidden sticky top-0 z-30 bg-gray-950 text-white px-4 py-3 flex items-center justify-between border-b border-gray-800 shadow-md">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center shadow-md">
+            <span className="font-bold text-white text-base leading-none">C</span>
+          </div>
+          <h1 className="text-lg font-bold tracking-wide">ChaloJi <span className="text-emerald-400 font-medium">Admin</span></h1>
+        </div>
 
-      <div className="w-[280px] bg-gradient-to-b from-gray-900 to-gray-950 text-white min-h-screen p-6 relative shadow-[4px_0_24px_rgba(0,0,0,0.05)] z-20 flex flex-col">
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 focus:outline-none transition-colors"
+          aria-label="Toggle Navigation Menu"
+        >
+          {isMobileMenuOpen ? (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+      </div>
 
-        <div className="flex items-center gap-3 mb-10 pb-6 border-b border-gray-800/50">
+      {/* Mobile Backdrop */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 lg:hidden transition-opacity"
+          onClick={closeMenu}
+        />
+      )}
 
-          <div className="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+      {/* Premium Sidebar (Responsive Drawer) */}
 
-             <span className="font-bold text-white text-lg leading-none">C</span>
+      <aside
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-[280px] bg-gradient-to-b from-gray-900 to-gray-950 text-white min-h-screen p-6 shadow-2xl lg:shadow-[4px_0_24px_rgba(0,0,0,0.05)] transition-transform duration-300 ease-in-out ${
+          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        } flex flex-col overflow-y-auto custom-scrollbar`}
+      >
 
+        <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-800/50">
+
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+              <span className="font-bold text-white text-lg leading-none">C</span>
+            </div>
+
+            <h1 className="text-xl font-bold tracking-wide">ChaloJi <span className="text-emerald-400 font-medium">Admin</span></h1>
           </div>
 
-          <h1 className="text-xl font-bold tracking-wide">ChaloJi <span className="text-emerald-400 font-medium">Admin</span></h1>
+          <button
+            onClick={closeMenu}
+            className="lg:hidden text-gray-400 hover:text-white p-1"
+          >
+            ✕
+          </button>
 
         </div>
 
         
 
-        <nav className="flex flex-col gap-2 flex-1">
+        <nav className="flex flex-col gap-1.5 flex-1">
 
-          <Link to="/" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+          <Link to="/" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
 
             <span className="text-emerald-400 group-hover:text-emerald-300">❖</span> Dashboard
 
           </Link>
 
-          <Link to="/drivers" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+          <Link to="/drivers" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
 
             <span className="text-emerald-400 group-hover:text-emerald-300">🚗</span> Drivers Details
 
           </Link>
 
-          <Link to="/radar" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+          <Link to="/radar" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
 
             <span className="text-emerald-400 group-hover:text-emerald-300">🌍</span> Live Radar Map
 
           </Link>
 
-          <Link to="/users" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+          <Link to="/users" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
 
             <span className="text-emerald-400 group-hover:text-emerald-300">👥</span> Passengers
 
           </Link>
 
-          <Link to="/rides" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+          <Link to="/rides" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
 
             <span className="text-emerald-400 group-hover:text-emerald-300">📍</span> Live Rides
 
           </Link>
 
-          <Link to="/revenue" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+          <Link to="/revenue" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
 
             <span className="text-emerald-400 group-hover:text-emerald-300">📈</span> Revenue & GMV
 
           </Link>
 
-          <Link to="/dues" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+          <Link to="/dues" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
 
             <span className="text-emerald-400 group-hover:text-emerald-300">💸</span> Pending Dues
 
           </Link>
 
-          <Link to="/baraat-bookings" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+          <Link to="/baraat-bookings" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
 
             <span className="text-emerald-400 group-hover:text-emerald-300">🥁</span> Baraat Bookings
 
           </Link>
 
-          <Link to="/outstation-bookings" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+          <Link to="/outstation-bookings" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
 
             <span className="text-emerald-400 group-hover:text-emerald-300">✈️</span> Outstation Rides
 
@@ -132,33 +180,33 @@ function PrivateLayout({ children }: { children: React.ReactNode }) {
             ChaloJi Sharing
           </div>
 
-          <Link to="/sharing/routes" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
+          <Link to="/sharing/routes" onClick={closeMenu} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
             <span className="text-emerald-400 group-hover:text-emerald-300">🛺</span> Routes
           </Link>
 
-          <Link to="/sharing/points" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
+          <Link to="/sharing/points" onClick={closeMenu} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
             <span className="text-emerald-400 group-hover:text-emerald-300">📍</span> Pickup Points
           </Link>
 
-          <Link to="/sharing/fares" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
+          <Link to="/sharing/fares" onClick={closeMenu} className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
             <span className="text-emerald-400 group-hover:text-emerald-300">💰</span> Fixed Fares
           </Link>
 
           <div className="h-px bg-white/10 my-2 mx-4"></div>
 
-          <Link to="/broadcasts" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+          <Link to="/broadcasts" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
 
             <span className="text-emerald-400 group-hover:text-emerald-300">📢</span> Broadcasts
 
           </Link>
 
-          <Link to="/feedback" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+          <Link to="/feedback" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
 
             <span className="text-emerald-400 group-hover:text-emerald-300">💬</span> Feedback
 
           </Link>
 
-          <Link to="/settings" className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 rounded-xl font-medium transition-all group">
+          <Link to="/settings" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
 
             <span className="text-emerald-400 group-hover:text-emerald-300">⚙️</span> Settings
 
@@ -170,9 +218,12 @@ function PrivateLayout({ children }: { children: React.ReactNode }) {
 
         <button 
 
-          onClick={logout} 
+          onClick={() => {
+            closeMenu();
+            logout();
+          }} 
 
-          className="mt-auto w-full p-3.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-xl transition-all font-medium border border-red-500/20 shadow-sm"
+          className="mt-6 w-full p-3.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-xl transition-all font-medium border border-red-500/20 shadow-sm text-sm"
 
         >
 
@@ -180,15 +231,15 @@ function PrivateLayout({ children }: { children: React.ReactNode }) {
 
         </button>
 
-      </div>
+      </aside>
 
       
 
       {/* Main Content Area */}
 
-      <div className="flex-1 h-screen overflow-y-auto bg-[#F8FAFC]">
+      <div className="flex-1 min-h-[calc(100vh-57px)] lg:min-h-screen overflow-y-auto bg-[#F8FAFC]">
 
-        <div className="max-w-7xl mx-auto p-8 lg:p-10">
+        <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-10">
 
           {children}
 

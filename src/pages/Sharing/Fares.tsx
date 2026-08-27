@@ -163,22 +163,22 @@ export default function Fares() {
   return (
     <div className="animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-8">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-2 sm:gap-3">
             <span>💰</span>
             <span>ChaloJi Fixed Fare Matrix</span>
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-gray-500 mt-1 text-xs sm:text-sm">
             Configure per-seat fixed fares between pickup stops & drop points.
           </p>
         </div>
         <button
           onClick={() => openAddModal()}
           disabled={!selectedRouteId || points.length < 2}
-          className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-[0_4px_14px_rgba(5,150,105,0.4)] transition-all flex items-center gap-2"
+          className="self-start sm:self-auto px-4 py-2 sm:px-5 sm:py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-[0_4px_14px_rgba(5,150,105,0.4)] transition-all flex items-center gap-1.5"
         >
-          <span className="text-lg leading-none">+</span> Set Fixed Fare
+          <span className="text-base sm:text-lg leading-none">+</span> Set Fare
         </button>
       </div>
 

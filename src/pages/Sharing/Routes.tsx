@@ -159,28 +159,28 @@ export default function Routes() {
   return (
     <div className="animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-8">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-2 sm:gap-3">
             <span>🛺</span>
             <span>ChaloJi Sharing Routes</span>
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-gray-500 mt-1 text-xs sm:text-sm">
             Manage digital fixed-fare shared transport routes, start & end terminals.
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 self-start sm:self-auto">
           <button
             onClick={fetchRoutes}
-            className="px-4 py-2.5 bg-white border border-gray-200 shadow-sm rounded-xl text-xs sm:text-sm text-gray-700 hover:text-emerald-700 hover:border-emerald-200 transition-all font-semibold flex items-center gap-2"
+            className="px-3 py-2 sm:px-4 sm:py-2.5 bg-white border border-gray-200 shadow-sm rounded-xl text-xs sm:text-sm text-gray-700 hover:text-emerald-700 hover:border-emerald-200 transition-all font-semibold flex items-center gap-1.5"
           >
-            <span className="text-lg leading-none">↻</span> Refresh
+            <span className="text-base sm:text-lg leading-none">↻</span> Refresh
           </button>
           <button
             onClick={openCreateModal}
-            className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-[0_4px_14px_rgba(5,150,105,0.4)] transition-all flex items-center gap-2"
+            className="px-4 py-2 sm:px-5 sm:py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-[0_4px_14px_rgba(5,150,105,0.4)] transition-all flex items-center gap-1.5"
           >
-            <span className="text-lg leading-none">+</span> Add New Route
+            <span className="text-base sm:text-lg leading-none">+</span> Add Route
           </button>
         </div>
       </div>

@@ -52,46 +52,46 @@ export default function Broadcasts() {
   };
 
   return (
-    <div className="animate-in fade-in duration-300 h-full flex flex-col xl:flex-row gap-8">
+    <div className="animate-in fade-in duration-300 h-full flex flex-col xl:flex-row gap-6 sm:gap-8">
       
       {/* Left Column: Form */}
       <div className="flex-1">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Push Broadcasts</h1>
-          <p className="text-gray-500 mt-1">Send emergency alerts, surge pricing info, or news to all devices.</p>
+        <div className="mb-4 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Push Broadcasts</h1>
+          <p className="text-gray-500 mt-1 text-xs sm:text-sm">Send emergency alerts, surge pricing info, or news to all devices.</p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-indigo-100/60 p-8 relative overflow-hidden">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-indigo-100/60 p-4 sm:p-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500 rounded-full blur-[80px] opacity-20 pointer-events-none"></div>
           
-          <form onSubmit={handleSend} className="space-y-6 relative z-10">
+          <form onSubmit={handleSend} className="space-y-4 sm:space-y-6 relative z-10">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Alert Title</label>
+              <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Alert Title</label>
               <input 
                 type="text" 
                 value={form.title}
                 onChange={e => setForm({...form, title: e.target.value})}
                 placeholder="e.g. 🌧️ Heavy Rain Warning!"
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-bold"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-bold"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Broadcast Message</label>
+              <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Broadcast Message</label>
               <textarea 
                 value={form.message}
                 onChange={e => setForm({...form, message: e.target.value})}
                 placeholder="Type the message that will pop up on screens..."
                 rows={4}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium resize-none shadow-inner"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium resize-none shadow-inner"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Target Audience</label>
-              <div className="flex gap-4">
+              <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1.5 sm:mb-2">Target Audience</label>
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                  {['drivers', 'passengers', 'all'].map(t => (
-                   <label key={t} className={`flex-1 cursor-pointer flex items-center justify-center p-4 border rounded-xl font-bold uppercase tracking-wider text-xs transition-all ${form.target === t ? 'border-indigo-500 bg-indigo-50 text-indigo-700 shadow-sm' : 'border-gray-200 text-gray-400 hover:bg-gray-50'}`}>
+                   <label key={t} className={`flex-1 cursor-pointer flex items-center justify-center p-3 sm:p-4 border rounded-xl font-bold uppercase tracking-wider text-[11px] sm:text-xs transition-all ${form.target === t ? 'border-indigo-500 bg-indigo-50 text-indigo-700 shadow-sm' : 'border-gray-200 text-gray-400 hover:bg-gray-50'}`}>
                      <input type="radio" name="target" value={t} checked={form.target === t} onChange={() => setForm({...form, target: t})} className="hidden" />
                      {t}
                    </label>
@@ -102,7 +102,7 @@ export default function Broadcasts() {
             <button 
               type="submit"
               disabled={sending}
-              className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest text-sm shadow-lg shadow-indigo-600/30 hover:opacity-90 transition-all hover:-translate-y-1 disabled:opacity-50 disabled:hover:translate-y-0 flex items-center justify-center gap-3"
+              className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl font-black uppercase tracking-widest text-xs sm:text-sm shadow-lg shadow-indigo-600/30 hover:opacity-90 transition-all hover:-translate-y-0.5 disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {sending ? 'Sending Signal...' : 'Send Broadcast Now'} 🚀
             </button>

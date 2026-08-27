@@ -54,18 +54,18 @@ export default function Radar() {
   });
 
   return (
-    <div className="flex flex-col h-full h-[calc(100vh-100px)] animate-in fade-in duration-300">
-      <div className="flex items-center justify-between mb-6 shrink-0">
+    <div className="flex flex-col h-[calc(100vh-130px)] sm:h-[calc(100vh-160px)] lg:h-[calc(100vh-120px)] animate-in fade-in duration-300">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-6 shrink-0">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Live Map Radar</h1>
-          <p className="text-gray-500 mt-1">Real-time God's Eye view of your active fleet.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Live Map Radar</h1>
+          <p className="text-gray-500 text-xs sm:text-sm mt-0.5 sm:mt-1">Real-time God's Eye view of your active fleet.</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 self-start sm:self-auto">
            <div className="flex relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-emerald-500"></span>
            </div>
-           <span className="text-sm font-bold text-emerald-700 bg-emerald-50 px-4 py-2 rounded-full border border-emerald-100 shadow-sm">
+           <span className="text-xs sm:text-sm font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-emerald-100 shadow-xs">
              {activeDrivers.length} Drivers Online
            </span>
         </div>
