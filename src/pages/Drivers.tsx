@@ -71,15 +71,20 @@ export default function Drivers() {
 
   const updateVerification = async (driverId: string, status: string) => {
     try {
-      await updateDoc(doc(db, 'drivers', driverId), { verificationStatus: status });
+      const updateData: Record<string, any> = { verificationStatus: status };
+      if (status === 'approved') {
+        updateData.accountStatus = 'active';
+      }
+      await updateDoc(doc(db, 'drivers', driverId), updateData);
       setDrivers((prev) =>
-        prev.map((d) => (d.id === driverId ? { ...d, verificationStatus: status } : d))
+        prev.map((d) => (d.id === driverId ? { ...d, ...updateData } : d))
       );
       if (selectedDriver?.id === driverId) {
-        setSelectedDriver((prev) => (prev ? { ...prev, verificationStatus: status } : null));
+        setSelectedDriver((prev) => (prev ? { ...prev, ...updateData } : null));
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error('update verification error:', e);
+      alert(`Failed to update driver status: ${e.message || 'Permission denied'}`);
     }
   };
 
