@@ -14,7 +14,16 @@ import {
 } from 'firebase/auth';
 import { auth } from './firebase';
 
-export const ADMIN_EMAIL = 'shuklarohan388@gmail.com';
+export const ADMIN_EMAILS = [
+  'shuklarohan388@gmail.com',
+  'admin@chalojii.in',
+  'chaloji.admin@gmail.com',
+];
+
+export function isAllowedAdminEmail(email?: string | null): boolean {
+  if (!email) return false;
+  return ADMIN_EMAILS.includes(email.toLowerCase());
+}
 
 interface AuthContextType {
   user: { email: string } | null;
@@ -54,10 +63,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const result = await signInWithPopup(auth, provider);
       const email = result.user.email?.toLowerCase() ?? '';
-      if (email !== ADMIN_EMAIL) {
+      if (!isAllowedAdminEmail(email)) {
         await signOut(auth);
         throw new Error(
-          'Access denied. Only the authorized admin account can sign in.'
+          'Access denied. Only authorized admin accounts can sign in.'
         );
       }
     } catch (err: any) {

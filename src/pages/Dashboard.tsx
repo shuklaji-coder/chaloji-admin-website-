@@ -85,125 +85,91 @@ export default function Dashboard() {
         const startOfWeek = new Date(now);
         startOfWeek.setDate(now.getDate() - 7);
 
-        const [driversSnap, usersSnap, ridesSnap, todayRidesSnap, weeklyRidesSnap] = await Promise.all([
-
+        const results = await Promise.allSettled([
           getDocs(collection(db, 'drivers')),
-
           getDocs(collection(db, 'users')),
-
           getDocs(collection(db, 'rides')),
-
           getDocs(query(collection(db, 'rides'), where('createdAt', '>=', startOfToday))),
-
           getDocs(query(collection(db, 'rides'), where('createdAt', '>=', startOfWeek))),
-
         ]);
 
+        const driversSnap = results[0].status === 'fulfilled' ? results[0].value : null;
+        const usersSnap = results[1].status === 'fulfilled' ? results[1].value : null;
+        const ridesSnap = results[2].status === 'fulfilled' ? results[2].value : null;
+        const todayRidesSnap = results[3].status === 'fulfilled' ? results[3].value : null;
+        const weeklyRidesSnap = results[4].status === 'fulfilled' ? results[4].value : null;
 
+        results.forEach((res, idx) => {
+          if (res.status === 'rejected') {
+            console.error(`Dashboard fetch query ${idx} failed:`, res.reason);
+          }
+        });
 
         let online = 0, pendingVer = 0, active = 0, earnings = 0, dues = 0;
-
         const vehicleCounts: { [key: string]: number } = {};
 
-        driversSnap.forEach((d) => {
+        if (driversSnap) {
+          driversSnap.forEach((d) => {
+            const data = d.data();
+            if (data.isOnline) online++;
+            if (data.verificationStatus === 'pending') pendingVer++;
+            earnings += data.earnings || 0;
+            dues += data.totalDueAmount || 0;
+            const vehicle = data.vehicleType || 'other';
+            vehicleCounts[vehicle] = (vehicleCounts[vehicle] || 0) + 1;
+          });
+        }
 
-          const data = d.data();
-
-          if (data.isOnline) online++;
-
-          if (data.verificationStatus === 'pending') pendingVer++;
-
-          earnings += data.earnings || 0;
-
-          dues += data.totalDueAmount || 0;
-
-          const vehicle = data.vehicleType || 'other';
-
-          vehicleCounts[vehicle] = (vehicleCounts[vehicle] || 0) + 1;
-
-        });
-
-
-
-        ridesSnap.forEach((r) => {
-
-          if (r.data().status === 'accepted' || r.data().status === 'ongoing') active++;
-
-        });
+        if (ridesSnap) {
+          ridesSnap.forEach((r) => {
+            if (r.data().status === 'accepted' || r.data().status === 'ongoing') active++;
+          });
+        }
 
         const vehicleChartData = Object.entries(vehicleCounts).map(([name, value]) => ({ name, value }));
-
         setVehicleData(vehicleChartData);
 
         const weeklyChartData: TimeSeriesData[] = [];
+        if (weeklyRidesSnap) {
+          for (let i = 6; i >= 0; i--) {
+            const date = new Date(now);
+            date.setDate(now.getDate() - i);
+            const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
 
-        for (let i = 6; i >= 0; i--) {
+            const dayRides = weeklyRidesSnap.docs.filter(doc => {
+              const createdAt = doc.data().createdAt?.toDate();
+              return createdAt && createdAt >= startOfDay && createdAt < endOfDay;
+            });
 
-          const date = new Date(now);
+            const dayRevenue = dayRides.reduce((sum, doc) => sum + (doc.data().fare || 0), 0);
 
-          date.setDate(now.getDate() - i);
-
-          const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-          const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
-
-          const dayRides = weeklyRidesSnap.docs.filter(doc => {
-
-            const createdAt = doc.data().createdAt?.toDate();
-
-            return createdAt && createdAt >= startOfDay && createdAt < endOfDay;
-
-          });
-
-          const dayRevenue = dayRides.reduce((sum, doc) => sum + (doc.data().fare || 0), 0);
-
-          weeklyChartData.push({
-
-            date: date.toLocaleDateString('en-US', { weekday: 'short' }),
-
-            rides: dayRides.length,
-
-            revenue: dayRevenue,
-
-          });
-
+            weeklyChartData.push({
+              date: date.toLocaleDateString('en-US', { weekday: 'short' }),
+              rides: dayRides.length,
+              revenue: dayRevenue,
+            });
+          }
         }
-
         setWeeklyData(weeklyChartData);
 
-
-
         setStats({
-
-          totalDrivers: driversSnap.size,
-
+          totalDrivers: driversSnap ? driversSnap.size : 0,
           onlineDrivers: online,
-
           pendingVerifications: pendingVer,
-
-          totalUsers: usersSnap.size,
-
-          totalRides: ridesSnap.size,
-
+          totalUsers: usersSnap ? usersSnap.size : 0,
+          totalRides: ridesSnap ? ridesSnap.size : 0,
           activeRides: active,
-
-          todayRides: todayRidesSnap.size,
-
+          todayRides: todayRidesSnap ? todayRidesSnap.size : 0,
           totalEarnings: earnings,
-
           totalDueAmount: dues,
-
         });
-
       } catch (e) {
         console.error('Dashboard fetch error:', e);
         console.error('Dashboard error details:', JSON.stringify(e, null, 2));
       } finally {
-
         setLoading(false);
-
       }
-
     })();
 
   }, []);

@@ -33,6 +33,7 @@ import SharingFares from './pages/Sharing/Fares';
 
 import BaraatBookings from './pages/BaraatBookings';
 import OutstationBookings from './pages/OutstationBookings';
+import SchedulePickups from './pages/SchedulePickups';
 
 
 
@@ -172,6 +173,12 @@ function PrivateLayout({ children }: { children: React.ReactNode }) {
 
           </Link>
 
+          <Link to="/schedule-pickups" onClick={closeMenu} className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium transition-all group text-sm">
+
+            <span className="text-emerald-400 group-hover:text-emerald-300">🗓️</span> Schedule Pickups
+
+          </Link>
+
           
 
           <div className="h-px bg-white/10 my-2 mx-4"></div>
@@ -285,6 +292,8 @@ function App() {
           <Route path="/baraat-bookings" element={<PrivateLayout><BaraatBookings /></PrivateLayout>} />
 
           <Route path="/outstation-bookings" element={<PrivateLayout><OutstationBookings /></PrivateLayout>} />
+
+          <Route path="/schedule-pickups" element={<PrivateLayout><SchedulePickups /></PrivateLayout>} />
 
           <Route path="/sharing/routes" element={<PrivateLayout><SharingRoutes /></PrivateLayout>} />
 
